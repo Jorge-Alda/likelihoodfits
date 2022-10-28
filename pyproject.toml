@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "likelihoodfits"
+version = "0.1.0"
+description = "Plots 2D likelihood fits"
+authors = ["Jorge-Alda <jalda@unizar.es>"]
+license = "GPL"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+h5py = "^3.7.0"
+numpy = "^1.23.4"
+scipy = "^1.9.3"
+matplotlib = "^3.6.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

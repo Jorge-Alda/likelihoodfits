@@ -1,5 +1,5 @@
 from math import isinf
-from typing import Callable, Self
+from typing import Callable
 from collections.abc import Sequence
 from dataclasses import dataclass, field
 from itertools import product
@@ -160,7 +160,7 @@ class LikelihoodResults:
                 gr.create_dataset('values', data=l.data, dtype='f4')
 
     @classmethod
-    def from_hdf5(cls, path: str) -> Self:
+    def from_hdf5(cls, path: str):
         """Loads likelihood data from a HDF5 file
 
         Argsuments

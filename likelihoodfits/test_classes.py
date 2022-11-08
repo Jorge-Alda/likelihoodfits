@@ -60,25 +60,25 @@ class TestLikelihoodResults:
         assert self.lhr.likelihoods[-1].likelihood == 'testnew'
 
     def test_calculate_point(self):
-        def fun(x, y): return {'testnew': x*y}
+        def fun(x, y): return {'testnew': x*y, 'random': 4}
         self.lhr.new_likelihood('testnew', 'testnew')
         self.lhr.calculate_point(fun, 3, 1)
         assert self.lhr.likelihoods[-1].data[1, 3] == 21  # Está transpuesto
 
     def test_calculate_all(self):
-        def fun(x, y): return {'testnew': x*y}
+        def fun(x, y): return {'testnew': x*y, 'random': 4}
         self.lhr.new_likelihood('testnew', 'testnew')
         self.lhr.calculate_all(fun)
         assert self.lhr.likelihoods[-1].data[2, 3] == 24
 
     def test_calculate_missing_lh(self):
-        def fun(x, y): return {'testold': x*y}
+        def fun(x, y): return {'testold': x*y, 'random': 4}
         self.lhr.new_likelihood('testnew', 'testnew')
         with pytest.raises(KeyError):
             self.lhr.calculate_point(fun, 3, 1)
 
     def test_save(self):
-        def fun(x, y): return {'testnew': x*y}
+        def fun(x, y): return {'testnew': x*y, 'random': 4}
         self.lhr.new_likelihood('testnew', 'testnew')
         self.lhr.calculate_all(fun)
         try:
@@ -90,7 +90,7 @@ class TestLikelihoodResults:
         assert saved
 
     def test_load(self):
-        def fun(x, y): return {'testnew': x*y}
+        def fun(x, y): return {'testnew': x*y, 'random': 4}
         self.lhr.new_likelihood('testnew', 'testnew')
         self.lhr.calculate_all(fun)
         self.lhr.to_hdf5('test.hdf5')

@@ -204,8 +204,8 @@ class LikelihoodResults:
                               order=len(self.likelihoods))
         self.likelihoods.append(lh)
 
-    def calculate(self, fun: LikelihoodFunction) -> int:
-        """Calculates the likelihoods at the points of the grid
+    def calculate_point(self, fun: LikelihoodFunction, ix: int, iy: int):
+        """Calculates the likelihoods at one point of the grid
 
         Arguments
         ---------
@@ -216,19 +216,19 @@ class LikelihoodResults:
             The likelihood names must be the same as in the definition
             of the LikelihoodValues objects.
 
-        Yields
-        ------
-            Iterator[int]: Number of points already calculated
+            ix (int): x-index of the point.
+
+            iy (int): y-index of the point
         """
-        i = 0
+        x = self.x[ix]
+        y = self.y[iy]
+        lhdict = fun(x, y)
+        for l in self.likelihoods:
+            lval = lhdict[l.likelihood]
+            if isinf(lval):
+                lval = -200.0
+            l.data[iy, ix] = lval
+
+    def calculate_all(self, fun: LikelihoodFunction):
         for ix, iy in product(range(self.x.len), range(self.y.len)):
-            x = self.x[ix]
-            y = self.y[iy]
-            lhdict = fun(x, y)
-            for l in self.likelihoods:
-                lval = lhdict[l.likelihood]
-                if isinf(lval):
-                    lval = -200.0
-                l.data[iy, ix] = lval
-            yield i
-            i += 1
+            self.calculate_point(fun, ix, iy)

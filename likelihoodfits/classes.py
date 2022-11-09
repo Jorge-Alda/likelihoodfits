@@ -4,6 +4,7 @@ from collections.abc import Sequence
 from dataclasses import dataclass, field
 from itertools import product
 import numpy as np
+from io import BytesIO
 import h5py
 
 LikelihoodFunction = Callable[[float, float], dict[str, float]]
@@ -138,7 +139,7 @@ class LikelihoodResults:
                 "The dimension of the data and the axis do not match along the y direction")
         self.likelihoods.append(lh)
 
-    def to_hdf5(self, path: str) -> None:
+    def to_hdf5(self, path: str | BytesIO) -> None:
         """Saves to an HDF5 file
 
         Arguments
@@ -160,7 +161,7 @@ class LikelihoodResults:
                 gr.create_dataset('values', data=l.data, dtype='f4')
 
     @classmethod
-    def from_hdf5(cls, path: str):
+    def from_hdf5(cls, path: str | BytesIO):
         """Loads likelihood data from a HDF5 file
 
         Argsuments

@@ -1,5 +1,6 @@
 import likelihoodfits
 import numpy as np
+from io import BytesIO
 import pytest
 
 
@@ -82,7 +83,8 @@ class TestLikelihoodResults:
         self.lhr.new_likelihood('testnew', 'testnew')
         self.lhr.calculate_all(fun)
         try:
-            self.lhr.to_hdf5('test.hdf5')
+            with BytesIO() as file:
+                self.lhr.to_hdf5(file)
         except:
             saved = False
         else:
@@ -93,6 +95,7 @@ class TestLikelihoodResults:
         def fun(x, y): return {'testnew': x*y, 'random': 4}
         self.lhr.new_likelihood('testnew', 'testnew')
         self.lhr.calculate_all(fun)
-        self.lhr.to_hdf5('test.hdf5')
-        lh2 = likelihoodfits.LikelihoodResults.from_hdf5('test.hdf5')
+        with BytesIO() as file:
+            self.lhr.to_hdf5(file)
+            lh2 = likelihoodfits.LikelihoodResults.from_hdf5(file)
         assert lh2.likelihoods[0].data[2, 3] == 24
